@@ -78,10 +78,10 @@ Item {
 
             function getBatteryPercentageText() {
                 if (!isNaN(battery.percentRemaining.rawValue)) {
-                    if (battery.percentRemaining.rawValue > 98.9) {
+                    if (battery.energy.rawValue < 1) {
                         return qsTr("100%")
                     } else {
-                        return battery.percentRemaining.valueString + battery.percentRemaining.units
+                        return Math.round(100-battery.energy.rawValue/1060) + battery.percentRemaining.units
                     }
                 } else if (!isNaN(battery.voltage.rawValue)) {
                     return battery.voltage.valueString + battery.voltage.units
