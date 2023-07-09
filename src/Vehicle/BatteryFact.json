@@ -56,7 +56,7 @@
     "name":             "temperature",
     "shortDesc":        "Temperature",
     "type":             "double",
-    "decimalPlaces":    0,
+    "decimalPlaces":    1,
     "units":            "C"
 },
 {
@@ -77,6 +77,66 @@
     "name":             "timeRemainingStr",
     "shortDesc":        "Time Remaining",
     "type":             "string"
+},
+{
+    "name":             "mode",
+    "shortDesc":        "mode",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "stackv",
+    "shortDesc":        "stackv",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "loadcurrent",
+    "shortDesc":        "loadcurrent",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "currentbattery",
+    "shortDesc":        "currentbattery",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "battvolt",
+    "shortDesc":        "battvolt",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "loadvolt",
+    "shortDesc":        "loadvolt",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "h2press1",
+    "shortDesc":        "h2press1",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "h2press2",
+    "shortDesc":        "h2press2",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "fanspeed",
+    "shortDesc":        "fanspeed",
+    "type":             "double",
+    "decimalPlaces":    0
+},
+{
+    "name":             "energy",
+    "shortDesc":        "energy",
+    "type":             "double",
+    "decimalPlaces":    0
 },
 {
     "name":             "chargeState",
