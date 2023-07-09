@@ -25,6 +25,15 @@ const char* VehicleBatteryFactGroup::_instantPowerFactName          = "instantPo
 const char* VehicleBatteryFactGroup::_timeRemainingFactName         = "timeRemaining";
 const char* VehicleBatteryFactGroup::_timeRemainingStrFactName      = "timeRemainingStr";
 const char* VehicleBatteryFactGroup::_chargeStateFactName           = "chargeState";
+const char* VehicleBatteryFactGroup::_modeFactName                  = "mode";
+const char* VehicleBatteryFactGroup::_stackvFactName                = "stackv";
+const char* VehicleBatteryFactGroup::_currentbatteryFactName        = "currentbattery";
+const char* VehicleBatteryFactGroup::_energyFactName                = "energy";
+const char* VehicleBatteryFactGroup::_battvoltFactName                = "battvolt";
+const char* VehicleBatteryFactGroup::_loadvoltFactName                = "loadvolt";
+const char* VehicleBatteryFactGroup::_h2press1FactName                = "h2press1";
+const char* VehicleBatteryFactGroup::_h2press2FactName                = "h2press2";
+const char* VehicleBatteryFactGroup::_fanspeedFactName                = "fanspeed";
 
 const char* VehicleBatteryFactGroup::_settingsGroup =                       "Vehicle.battery";
 
@@ -42,6 +51,15 @@ VehicleBatteryFactGroup::VehicleBatteryFactGroup(uint8_t batteryId, QObject* par
     , _timeRemainingStrFact (0, _timeRemainingStrFactName,          FactMetaData::valueTypeString)
     , _chargeStateFact      (0, _chargeStateFactName,               FactMetaData::valueTypeUint8)
     , _instantPowerFact     (0, _instantPowerFactName,              FactMetaData::valueTypeDouble)
+    , _modeFact             (0, _modeFactName,                      FactMetaData::valueTypeDouble)
+    , _stackvFact           (0, _stackvFactName,                    FactMetaData::valueTypeDouble)
+    , _currentbatteryFact   (0, _currentbatteryFactName,            FactMetaData::valueTypeDouble)
+    , _energyFact           (0, _energyFactName,                    FactMetaData::valueTypeDouble)
+    , _battvoltFact           (0, _battvoltFactName,                    FactMetaData::valueTypeDouble)
+    , _loadvoltFact           (0, _loadvoltFactName,                    FactMetaData::valueTypeDouble)
+    , _h2press1Fact           (0, _h2press1FactName,                    FactMetaData::valueTypeDouble)
+    , _h2press2Fact           (0, _h2press2FactName,                    FactMetaData::valueTypeDouble)
+    , _fanspeedFact           (0, _fanspeedFactName,                    FactMetaData::valueTypeDouble)
 {
     _addFact(&_batteryIdFact,               _batteryIdFactName);
     _addFact(&_batteryFunctionFact,         _batteryFunctionFactName);
@@ -55,6 +73,15 @@ VehicleBatteryFactGroup::VehicleBatteryFactGroup(uint8_t batteryId, QObject* par
     _addFact(&_timeRemainingStrFact,        _timeRemainingStrFactName);
     _addFact(&_chargeStateFact,             _chargeStateFactName);
     _addFact(&_instantPowerFact,            _instantPowerFactName);
+    _addFact(&_modeFact,                    _modeFactName);
+    _addFact(&_stackvFact,                  _stackvFactName);
+    _addFact(&_currentbatteryFact,          _currentbatteryFactName);
+    _addFact(&_energyFact,                  _energyFactName);
+    _addFact(&_battvoltFact,                _battvoltFactName);
+    _addFact(&_loadvoltFact,                 _loadvoltFactName);
+    _addFact(&_h2press1Fact,                _h2press1FactName);
+    _addFact(&_h2press2Fact,                _h2press2FactName);
+    _addFact(&_fanspeedFact,                _fanspeedFactName);
 
     _batteryIdFact.setRawValue          (batteryId);
     _batteryFunctionFact.setRawValue    (MAV_BATTERY_FUNCTION_UNKNOWN);
@@ -67,6 +94,15 @@ VehicleBatteryFactGroup::VehicleBatteryFactGroup(uint8_t batteryId, QObject* par
     _timeRemainingFact.setRawValue      (qQNaN());
     _chargeStateFact.setRawValue        (MAV_BATTERY_CHARGE_STATE_UNDEFINED);
     _instantPowerFact.setRawValue       (qQNaN());
+    _modeFact.setRawValue               (qQNaN());
+    _stackvFact.setRawValue             (qQNaN());
+    _currentbatteryFact.setRawValue     (qQNaN());
+    _energyFact.setRawValue             (qQNaN());
+    _battvoltFact.setRawValue           (qQNaN());
+    _loadvoltFact.setRawValue           (qQNaN());
+    _h2press1Fact.setRawValue           (qQNaN());
+    _h2press2Fact.setRawValue           (qQNaN());
+    _fanspeedFact.setRawValue           (qQNaN());
 
     connect(&_timeRemainingFact, &Fact::rawValueChanged, this, &VehicleBatteryFactGroup::_timeRemainingChanged);
 }
@@ -131,6 +167,12 @@ void VehicleBatteryFactGroup::_handleBatteryStatus(Vehicle* vehicle, mavlink_mes
     VehicleBatteryFactGroup* group = _findOrAddBatteryGroupById(vehicle, batteryStatus.id);
 
     double totalVoltage = qQNaN();
+    double stackv = batteryStatus.voltages[0];
+    double battvolt = batteryStatus.voltages[1];
+    double loadvolt = batteryStatus.voltages[2];
+    double h2press1 = batteryStatus.voltages_ext[0];
+    double h2press2 = batteryStatus.voltages_ext[1];
+    double fanspeed = batteryStatus.voltages_ext[2];
     for (int i=0; i<10; i++) {
         double cellVoltage = batteryStatus.voltages[i] == UINT16_MAX ? qQNaN() : static_cast<double>(batteryStatus.voltages[i]) / 1000.0;
         if (qIsNaN(cellVoltage)) {
@@ -152,14 +194,23 @@ void VehicleBatteryFactGroup::_handleBatteryStatus(Vehicle* vehicle, mavlink_mes
 
     group->function()->setRawValue          (batteryStatus.battery_function);
     group->type()->setRawValue              (batteryStatus.type);
-    group->temperature()->setRawValue       (batteryStatus.temperature == INT16_MAX ?   qQNaN() : static_cast<double>(batteryStatus.temperature) / 100.0);
+    group->temperature()->setRawValue       (batteryStatus.temperature == INT16_MAX ?   qQNaN() : static_cast<double>(batteryStatus.temperature) / 10.0);
     group->voltage()->setRawValue           (totalVoltage);
     group->current()->setRawValue           (batteryStatus.current_battery == -1 ?      qQNaN() : static_cast<double>(batteryStatus.current_battery) / 100.0);
     group->mahConsumed()->setRawValue       (batteryStatus.current_consumed == -1  ?    qQNaN() : batteryStatus.current_consumed);
     group->percentRemaining()->setRawValue  (batteryStatus.battery_remaining == -1 ?    qQNaN() : batteryStatus.battery_remaining);
-    group->timeRemaining()->setRawValue     (batteryStatus.time_remaining == 0 ?        qQNaN() : batteryStatus.time_remaining);
+    group->timeRemaining()->setRawValue     ( batteryStatus.time_remaining);
     group->chargeState()->setRawValue       (batteryStatus.charge_state);
     group->instantPower()->setRawValue      (totalVoltage * group->current()->rawValue().toDouble());
+    group->mode()->setRawValue              (batteryStatus.mode);
+    group->stackv()->setRawValue            (stackv);
+    group->currentbattery()->setRawValue    (batteryStatus.current_battery);
+    group->energy()->setRawValue            (batteryStatus.energy_consumed);
+    group->battvolt()->setRawValue            (battvolt);
+    group->loadvolt()->setRawValue            (loadvolt);
+    group->h2press1()->setRawValue            (h2press1);
+    group->h2press2()->setRawValue            (h2press2);
+    group->fanspeed()->setRawValue            (fanspeed);
     group->_setTelemetryAvailable(true);
 }
 

@@ -33,6 +33,15 @@ public:
     Q_PROPERTY(Fact* timeRemainingStr   READ timeRemainingStr   CONSTANT)
     Q_PROPERTY(Fact* chargeState        READ chargeState        CONSTANT)
     Q_PROPERTY(Fact* instantPower       READ instantPower       CONSTANT)
+    Q_PROPERTY(Fact* mode               READ mode               CONSTANT)
+    Q_PROPERTY(Fact* stackv             READ stackv             CONSTANT)
+    Q_PROPERTY(Fact* currentbattery     READ currentbattery     CONSTANT)
+    Q_PROPERTY(Fact* energy             READ energy             CONSTANT)
+    Q_PROPERTY(Fact* battvolt             READ battvolt             CONSTANT)
+    Q_PROPERTY(Fact* loadvolt             READ loadvolt             CONSTANT)
+    Q_PROPERTY(Fact* h2press1             READ h2press1             CONSTANT)
+    Q_PROPERTY(Fact* h2press2             READ h2press2             CONSTANT)
+    Q_PROPERTY(Fact* fanspeed             READ fanspeed             CONSTANT)
 
     Fact* id                        () { return &_batteryIdFact; }
     Fact* function                  () { return &_batteryFunctionFact; }
@@ -46,6 +55,15 @@ public:
     Fact* timeRemaining             () { return &_timeRemainingFact; }
     Fact* timeRemainingStr          () { return &_timeRemainingStrFact; }
     Fact* chargeState               () { return &_chargeStateFact; }
+    Fact* mode                      () { return &_modeFact; }
+    Fact* stackv                    () { return &_stackvFact; }
+    Fact* currentbattery            () { return &_currentbatteryFact; }
+    Fact* energy                    () { return &_energyFact; }
+    Fact* battvolt                    () { return &_battvoltFact; }
+    Fact* loadvolt                    () { return &_loadvoltFact; }
+    Fact* h2press1                    () { return &_h2press1Fact; }
+    Fact* h2press2                    () { return &_h2press2Fact; }
+    Fact* fanspeed                    () { return &_fanspeedFact; }
 
     static const char* _batteryIdFactName;
     static const char* _batteryFunctionFactName;
@@ -59,6 +77,15 @@ public:
     static const char* _timeRemainingStrFactName;
     static const char* _chargeStateFactName;
     static const char* _instantPowerFactName;
+    static const char* _modeFactName;
+    static const char* _stackvFactName;
+    static const char* _currentbatteryFactName;
+    static const char* _energyFactName;
+    static const char* _battvoltFactName;
+    static const char* _loadvoltFactName;
+    static const char* _fanspeedFactName;
+    static const char* _h2press1FactName;
+    static const char* _h2press2FactName;
 
     static const char* _settingsGroup;
 
@@ -89,6 +116,16 @@ private:
     Fact            _timeRemainingStrFact;
     Fact            _chargeStateFact;
     Fact            _instantPowerFact;
+    Fact            _modeFact;
+    Fact            _stackvFact;
+    Fact            _currentbatteryFact;
+    Fact            _energyFact;
+    Fact            _battvoltFact;
+    Fact            _loadvoltFact;
+    Fact            _h2press1Fact;
+    Fact            _h2press2Fact;
+    Fact            _fanspeedFact;
+
 
     static const char* _batteryFactGroupNamePrefix;
 };
